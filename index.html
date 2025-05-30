@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>电影浓度鉴定</title>
+    <script src="movie-list.js"></script>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        background-color: #f5f5f5;
+      }
+      h1 {
+        text-align: center;
+        margin-bottom: 20px;
+      }
+      .export-container {
+        text-align: center;
+        margin-bottom: 30px;
+      }
+      .export-button {
+        background-color: #2196f3;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.2s;
+      }
+      .export-button:hover {
+        background-color: #1976d2;
+      }
+      .export-button:disabled {
+        background-color: #ccc;
+        cursor: not-allowed;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>电影浓度鉴定</h1>
+    <div class="export-container">
+      <button class="export-button" id="exportButton" disabled>导出选中内容</button>
+    </div>
+    <movie-list id="movieList"></movie-list>
+
+    <script>
+      const movieList = document.getElementById('movieList');
+      const exportButton = document.getElementById('exportButton');
+      let selectedMovies = [];
+
+      movieList.addEventListener('selection-change', (event) => {
+        selectedMovies = event.detail.selectedMovies;
+        exportButton.disabled = selectedMovies.length === 0;
+      });
+
+      exportButton.addEventListener('click', () => {
+        console.log('选中的电影：', selectedMovies);
+        console.log('选中数量：', selectedMovies.length);
+      });
+    </script>
+  </body>
+</html>
