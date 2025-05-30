@@ -1,3 +1,15 @@
+const getData = {
+  movie: async () => {
+    const response = await fetch("assets/data/index.json");
+    const data = await response.json();
+    return data;
+  },
+  tokusatsu: async () => {
+    const response = await fetch("assets/data/tokusatsu.json");
+    const data = await response.json();
+    return data;
+  },
+};
 class MovieList extends HTMLElement {
   constructor() {
     super();
@@ -9,9 +21,9 @@ class MovieList extends HTMLElement {
   }
 
   async connectedCallback() {
+    console.log(this.getAttribute("type"));
     try {
-      const response = await fetch("assets/data/index.json");
-      const data = await response.json();
+      const data = await getData[this.getAttribute("type")]();
       this.render(data);
     } catch (error) {
       console.error("Error loading movie data:", error);
@@ -59,7 +71,9 @@ class MovieList extends HTMLElement {
     }
   }
 
-  render(data) {
+  render(_data) {
+    console.log(this.initData);
+    const data = this.initData || _data;
     const years = Object.keys(data).sort((a, b) => b - a);
 
     const style = `
@@ -193,7 +207,7 @@ class MovieList extends HTMLElement {
         (year) => `
       <div class="year-section">
         <div class="year-header">
-          <h2 class="year-title">${year}年</h2>
+          <h2 class="year-title">${year}</h2>
           <button class="toggle-button ${
             this.collapsedYears.has(year) ? "collapsed" : ""
           }" 

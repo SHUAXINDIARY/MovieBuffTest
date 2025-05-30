@@ -41,14 +41,15 @@
     </style>
   </head>
   <body>
-    <h1>电影浓度鉴定</h1>
+    <h1>特摄浓度鉴定</h1>
     <div class="export-container">
       <button class="export-button" id="exportButton" disabled>
         导出选中内容
       </button>
       <button class="export-button" id="remove">清空选中</button>
+      <button class="export-button" id="contact">联系作者</button>
     </div>
-    <movie-list id="movieList" type="movie"></movie-list>
+    <movie-list id="movieList" type="tokusatsu"></movie-list>
     <movie-modal id="movieModal"></movie-modal>
 
     <script>
@@ -73,6 +74,13 @@
         selectedMovies = [];
         localStorage.removeItem("movie");
         location.reload();
+      });
+
+      document.querySelector("#contact").addEventListener("click", () => {
+        window.open(
+          "https://www.xiaohongshu.com/user/profile/617ce3ac000000000201bc2c?xhsshare=CopyLink&appuid=617ce3ac000000000201bc2c&apptime=1652512227",
+          "_black"
+        );
       });
     </script>
   </body>
