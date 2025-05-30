@@ -58,6 +58,7 @@
 
       movieList.addEventListener("selection-change", (event) => {
         selectedMovies = event.detail.selectedMovies;
+        localStorage.setItem("movie", JSON.stringify(selectedMovies));
         exportButton.disabled = selectedMovies.length === 0;
       });
 

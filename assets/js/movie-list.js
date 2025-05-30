@@ -2,7 +2,9 @@ class MovieList extends HTMLElement {
   constructor() {
     super();
     this.attachShadow({ mode: "open" });
-    this.selectedMovies = new Set();
+    const data = localStorage.getItem("movie");
+    const _arr = JSON.parse(data || "[]");
+    this.selectedMovies = new Set(_arr);
     this.collapsedYears = new Set();
   }
 
@@ -18,40 +20,42 @@ class MovieList extends HTMLElement {
 
   handleMovieClick(event) {
     const movieCard = event.currentTarget;
-    const movieTitle = movieCard.querySelector('.movie-title').textContent;
-    
+    const movieTitle = movieCard.querySelector(".movie-title").textContent;
+
     if (this.selectedMovies.has(movieTitle)) {
       this.selectedMovies.delete(movieTitle);
-      movieCard.classList.remove('selected');
+      movieCard.classList.remove("selected");
     } else {
       this.selectedMovies.add(movieTitle);
-      movieCard.classList.add('selected');
+      movieCard.classList.add("selected");
     }
-    
+
     // 触发自定义事件，通知外部选中状态变化
-    this.dispatchEvent(new CustomEvent('selection-change', {
-      detail: {
-        selectedMovies: Array.from(this.selectedMovies)
-      },
-      bubbles: true,
-      composed: true
-    }));
+    this.dispatchEvent(
+      new CustomEvent("selection-change", {
+        detail: {
+          selectedMovies: Array.from(this.selectedMovies),
+        },
+        bubbles: true,
+        composed: true,
+      })
+    );
   }
 
   handleYearToggle(event, year) {
     event.stopPropagation();
-    const yearSection = event.currentTarget.closest('.year-section');
-    const content = yearSection.querySelector('.movie-grid');
+    const yearSection = event.currentTarget.closest(".year-section");
+    const content = yearSection.querySelector(".movie-grid");
     const button = event.currentTarget;
-    
+
     if (this.collapsedYears.has(year)) {
       this.collapsedYears.delete(year);
-      content.classList.remove('collapsed');
-      button.classList.remove('collapsed');
+      content.classList.remove("collapsed");
+      button.classList.remove("collapsed");
     } else {
       this.collapsedYears.add(year);
-      content.classList.add('collapsed');
-      button.classList.add('collapsed');
+      content.classList.add("collapsed");
+      button.classList.add("collapsed");
     }
   }
 
@@ -190,15 +194,21 @@ class MovieList extends HTMLElement {
       <div class="year-section">
         <div class="year-header">
           <h2 class="year-title">${year}年</h2>
-          <button class="toggle-button ${this.collapsedYears.has(year) ? 'collapsed' : ''}" 
+          <button class="toggle-button ${
+            this.collapsedYears.has(year) ? "collapsed" : ""
+          }" 
                   onclick="this.getRootNode().host.handleYearToggle(event, '${year}')">
           </button>
         </div>
-        <div class="movie-grid ${this.collapsedYears.has(year) ? 'collapsed' : ''}">
+        <div class="movie-grid ${
+          this.collapsedYears.has(year) ? "collapsed" : ""
+        }">
           ${data[year]
             .map(
               (movie) => `
-            <div class="movie-card ${this.selectedMovies.has(movie) ? 'selected' : ''}" data-movie="${movie}">
+            <div class="movie-card ${
+              this.selectedMovies.has(movie) ? "selected" : ""
+            }" data-movie="${movie}">
               <h3 class="movie-title">${movie}</h3>
             </div>
           `
@@ -213,8 +223,8 @@ class MovieList extends HTMLElement {
     this.shadowRoot.innerHTML = `${style}${content}`;
 
     // 添加点击事件监听器
-    this.shadowRoot.querySelectorAll('.movie-card').forEach(card => {
-      card.addEventListener('click', this.handleMovieClick.bind(this));
+    this.shadowRoot.querySelectorAll(".movie-card").forEach((card) => {
+      card.addEventListener("click", this.handleMovieClick.bind(this));
     });
   }
 }
