@@ -5,45 +5,45 @@ class MovieModal extends HTMLElement {
   }
 
   static get observedAttributes() {
-    return ['open'];
+    return ["open"];
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
-    if (name === 'open') {
+    if (name === "open") {
       this.render();
     }
   }
 
   close() {
-    this.removeAttribute('open');
+    this.removeAttribute("open");
   }
 
   async captureAndDownload() {
-    const modalContent = this.shadowRoot.querySelector('.modal-content');
-    const button = this.shadowRoot.querySelector('.copy-button');
+    const modalContent = this.shadowRoot.querySelector(".modal-content");
+    const button = this.shadowRoot.querySelector(".copy-button");
     const originalText = button.textContent;
-    
+
     try {
-      button.textContent = '正在生成...';
+      button.textContent = "正在生成...";
       button.disabled = true;
 
       const canvas = await html2canvas(modalContent, {
-        backgroundColor: '#ffffff',
+        backgroundColor: "#ffffff",
         scale: 2, // 提高清晰度
         logging: false,
-        useCORS: true
+        useCORS: true,
       });
 
       // 创建下载链接
-      const link = document.createElement('a');
+      const link = document.createElement("a");
       link.download = `电影清单_${new Date().toLocaleDateString()}.png`;
-      link.href = canvas.toDataURL('image/png');
+      link.href = canvas.toDataURL("image/png");
       link.click();
 
-      button.textContent = '导出成功';
+      button.textContent = "导出成功";
     } catch (error) {
-      console.error('截图失败:', error);
-      button.textContent = '导出失败';
+      console.error("截图失败:", error);
+      button.textContent = "导出失败";
     } finally {
       setTimeout(() => {
         button.textContent = originalText;
@@ -52,9 +52,11 @@ class MovieModal extends HTMLElement {
     }
   }
 
-  render() {
-    const isOpen = this.hasAttribute('open');
-    const movies = this.getAttribute('movies') ? JSON.parse(this.getAttribute('movies')) : [];
+  async render() {
+    const isOpen = this.hasAttribute("open");
+    const movies = this.getAttribute("movies")
+      ? JSON.parse(this.getAttribute("movies"))
+      : [];
 
     const style = `
       <style>
@@ -190,21 +192,30 @@ class MovieModal extends HTMLElement {
         }
       </style>
     `;
-
+    const response = await fetch("assets/data/index.json");
+    const data = await response.json();
+    const total = Object.values(data).reduce((total, item) => {
+      total += item.length;
+      return total;
+    }, 0);
     const content = `
-      <div class="modal-overlay" ${!isOpen ? 'style="display: none;"' : ''}>
+      <div class="modal-overlay" ${!isOpen ? 'style="display: none;"' : ""}>
         <div class="modal-content">
           <div class="modal-header">
-            <h2 class="modal-title">已选电影 (${movies.length})</h2>
+            <h2 class="modal-title">已选电影 (${movies.length}/${total})</h2>
             <button class="close-button" onclick="this.getRootNode().host.close()">&times;</button>
           </div>
           <ul class="movie-list">
-            ${movies.map((movie, index) => `
+            ${movies
+              .map(
+                (movie, index) => `
               <li class="movie-item">
                 <span class="movie-number">${index + 1}.</span>
                 <h3 class="movie-title">${movie}</h3>
               </li>
-            `).join('')}
+            `
+              )
+              .join("")}
           </ul>
           <div class="modal-footer">
             <button class="copy-button" onclick="this.getRootNode().host.captureAndDownload()">
@@ -219,4 +230,4 @@ class MovieModal extends HTMLElement {
   }
 }
 
-customElements.define('movie-modal', MovieModal); 
+customElements.define("movie-modal", MovieModal);
