@@ -54,7 +54,8 @@
       const movieList = document.getElementById("movieList");
       const exportButton = document.getElementById("exportButton");
       const movieModal = document.getElementById("movieModal");
-      let selectedMovies = [];
+      let selectedMovies = JSON.parse(localStorage.getItem("movie") || "[]");
+      exportButton.disabled = selectedMovies.length === 0;
 
       movieList.addEventListener("selection-change", (event) => {
         selectedMovies = event.detail.selectedMovies;
