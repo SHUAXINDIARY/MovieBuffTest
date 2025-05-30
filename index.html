@@ -4,7 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>电影浓度鉴定</title>
-    <script src="movie-list.js"></script>
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <script src="./assets/js/movie-list.js"></script>
+    <script src="./assets/js/movie-modal.js"></script>
     <style>
       body {
         margin: 0;
@@ -41,23 +43,27 @@
   <body>
     <h1>电影浓度鉴定</h1>
     <div class="export-container">
-      <button class="export-button" id="exportButton" disabled>导出选中内容</button>
+      <button class="export-button" id="exportButton" disabled>
+        导出选中内容
+      </button>
     </div>
     <movie-list id="movieList"></movie-list>
+    <movie-modal id="movieModal"></movie-modal>
 
     <script>
-      const movieList = document.getElementById('movieList');
-      const exportButton = document.getElementById('exportButton');
+      const movieList = document.getElementById("movieList");
+      const exportButton = document.getElementById("exportButton");
+      const movieModal = document.getElementById("movieModal");
       let selectedMovies = [];
 
-      movieList.addEventListener('selection-change', (event) => {
+      movieList.addEventListener("selection-change", (event) => {
         selectedMovies = event.detail.selectedMovies;
         exportButton.disabled = selectedMovies.length === 0;
       });
 
-      exportButton.addEventListener('click', () => {
-        console.log('选中的电影：', selectedMovies);
-        console.log('选中数量：', selectedMovies.length);
+      exportButton.addEventListener("click", () => {
+        movieModal.setAttribute("movies", JSON.stringify(selectedMovies));
+        movieModal.setAttribute("open", "");
       });
     </script>
   </body>
