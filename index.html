@@ -46,6 +46,7 @@
       <button class="export-button" id="exportButton" disabled>
         导出选中内容
       </button>
+      <button class="export-button" id="remove">清空选中</button>
     </div>
     <movie-list id="movieList"></movie-list>
     <movie-modal id="movieModal"></movie-modal>
@@ -66,6 +67,12 @@
       exportButton.addEventListener("click", () => {
         movieModal.setAttribute("movies", JSON.stringify(selectedMovies));
         movieModal.setAttribute("open", "");
+      });
+
+      document.querySelector("#remove").addEventListener("click", () => {
+        selectedMovies = [];
+        localStorage.removeItem("movie");
+        location.reload();
       });
     </script>
   </body>
