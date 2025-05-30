@@ -1,3 +1,5 @@
+import { getData } from './getData.js';
+
 class MovieModal extends HTMLElement {
   constructor() {
     super();
@@ -255,12 +257,8 @@ class MovieModal extends HTMLElement {
         }
       </style>
     `;
-    const response = await fetch("assets/data/index.json");
-    const data = await response.json();
-    const total = Object.values(data).reduce((total, item) => {
-      total += item.length;
-      return total;
-    }, 0);
+    const data = await getData[this.getAttribute('type')]();
+    const total = Object.values(data).reduce((total, item) => total + item.length, 0);
     const content = `
       <div class="modal-overlay" ${!isOpen ? 'style="display: none;"' : ""}>
         <div class="modal-content">

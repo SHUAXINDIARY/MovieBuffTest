@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>电影浓度鉴定</title>
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
-    <script src="./assets/js/movie-list.js"></script>
-    <script src="./assets/js/movie-modal.js"></script>
+    <script type="module" src="./assets/js/movie-list.js"></script>
+    <script type="module" src="./assets/js/movie-modal.js"></script>
     <style>
       body {
         margin: 0;
@@ -49,7 +49,7 @@
       <button class="export-button" id="remove">清空选中</button>
     </div>
     <movie-list id="movieList" type="movie"></movie-list>
-    <movie-modal id="movieModal"></movie-modal>
+    <movie-modal id="movieModal" type="tokusatsu"></movie-modal>
 
     <script>
       const movieList = document.getElementById("movieList");

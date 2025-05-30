@@ -1,27 +1,16 @@
-const getData = {
-  movie: async () => {
-    const response = await fetch("assets/data/index.json");
-    const data = await response.json();
-    return data;
-  },
-  tokusatsu: async () => {
-    const response = await fetch("assets/data/tokusatsu.json");
-    const data = await response.json();
-    return data;
-  },
-};
+import { getData } from "./getData.js";
+
 class MovieList extends HTMLElement {
   constructor() {
     super();
     this.attachShadow({ mode: "open" });
-    const data = localStorage.getItem("movie");
-    const _arr = JSON.parse(data || "[]");
-    this.selectedMovies = new Set(_arr);
+    this.selectedMovies = new Set(
+      JSON.parse(localStorage.getItem("movie") || "[]")
+    );
     this.collapsedYears = new Set();
   }
 
   async connectedCallback() {
-    console.log(this.getAttribute("type"));
     try {
       const data = await getData[this.getAttribute("type")]();
       this.render(data);
