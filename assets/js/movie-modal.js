@@ -20,16 +20,23 @@ class MovieModal extends HTMLElement {
 
   async captureAndDownload() {
     const modalContent = this.shadowRoot.querySelector(".modal-content");
+    const movieList = this.shadowRoot.querySelector(".movie-list");
     const button = this.shadowRoot.querySelector(".copy-button");
     const originalText = button.textContent;
 
     // 记录原始样式
     const originalMaxHeight = modalContent.style.maxHeight;
     const originalOverflowY = modalContent.style.overflowY;
+    const listOriginalMaxHeight = movieList.style.maxHeight;
+    const listOriginalOverflowY = movieList.style.overflowY;
+    const listOriginalHeight = movieList.style.height;
 
     // 临时移除高度和滚动限制
     modalContent.style.maxHeight = "none";
     modalContent.style.overflowY = "visible";
+    movieList.style.maxHeight = "none";
+    movieList.style.overflowY = "visible";
+    movieList.style.height = "auto";
 
     try {
       button.textContent = "正在生成...";
@@ -59,6 +66,9 @@ class MovieModal extends HTMLElement {
       // 恢复原始样式
       modalContent.style.maxHeight = originalMaxHeight;
       modalContent.style.overflowY = originalOverflowY;
+      movieList.style.maxHeight = listOriginalMaxHeight;
+      movieList.style.overflowY = listOriginalOverflowY;
+      movieList.style.height = listOriginalHeight;
       setTimeout(() => {
         button.textContent = originalText;
         button.disabled = false;
@@ -106,12 +116,12 @@ class MovieModal extends HTMLElement {
           border-radius: 8px;
           padding: 24px;
           width: 90%;
-          max-width: 600px;
-          max-height: 80vh;
-          overflow-y: auto;
+          // max-width: 600px;
           transform: translateY(-20px);
           transition: transform 0.3s ease;
-          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+          box-shadow: 0 4px 6px rgba(52, 49, 49, 0.1);
+          display: flex;
+          flex-direction: column;
         }
 
         :host([open]) .modal-content {
@@ -154,6 +164,16 @@ class MovieModal extends HTMLElement {
           list-style: none;
           padding: 0;
           margin: 0;
+          display: grid;
+          grid-template-columns: repeat(5, 1fr);
+          gap: 8px 12px;
+          max-height: 320px;
+          overflow-y: auto;
+          flex: 1 1 auto;
+          background: linear-gradient(white 90%,rgba(0,0,0,0.03)), linear-gradient(rgba(0,0,0,0.03),white 10%) 0 100%;
+          background-repeat: no-repeat;
+          background-size: 100% 20px, 100% 20px;
+          background-attachment: local, local;
         }
 
         .movie-item {
@@ -203,6 +223,35 @@ class MovieModal extends HTMLElement {
         .copy-button:disabled {
           background-color: #ccc;
           cursor: not-allowed;
+        }
+
+        @media (max-width: 600px) {
+          .modal-content {
+            width: 98%;
+            padding: 10px;
+            font-size: 15px;
+          }
+          .modal-title {
+            font-size: 17px;
+          }
+          .movie-list {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 6px 6px;
+            max-height: 220px;
+          }
+          .movie-item {
+            padding: 8px;
+            min-height: 32px;
+            font-size: 14px;
+          }
+          .modal-footer {
+            padding-top: 8px;
+            margin-top: 10px;
+          }
+          .copy-button {
+            font-size: 13px;
+            padding: 6px 10px;
+          }
         }
       </style>
     `;
