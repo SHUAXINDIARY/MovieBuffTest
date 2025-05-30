@@ -23,20 +23,31 @@ class MovieModal extends HTMLElement {
     const button = this.shadowRoot.querySelector(".copy-button");
     const originalText = button.textContent;
 
+    // 记录原始样式
+    const originalMaxHeight = modalContent.style.maxHeight;
+    const originalOverflowY = modalContent.style.overflowY;
+
+    // 临时移除高度和滚动限制
+    modalContent.style.maxHeight = "none";
+    modalContent.style.overflowY = "visible";
+
     try {
       button.textContent = "正在生成...";
       button.disabled = true;
 
+      // 等待样式生效
+      await new Promise((resolve) => setTimeout(resolve, 100));
+
       const canvas = await html2canvas(modalContent, {
         backgroundColor: "#ffffff",
-        scale: 2, // 提高清晰度
+        scale: 2,
         logging: false,
         useCORS: true,
       });
 
       // 创建下载链接
       const link = document.createElement("a");
-      link.download = `电影清单_${new Date().toLocaleDateString()}.png`;
+      link.download = `清单_${new Date().toLocaleDateString()}.png`;
       link.href = canvas.toDataURL("image/png");
       link.click();
 
@@ -45,6 +56,9 @@ class MovieModal extends HTMLElement {
       console.error("截图失败:", error);
       button.textContent = "导出失败";
     } finally {
+      // 恢复原始样式
+      modalContent.style.maxHeight = originalMaxHeight;
+      modalContent.style.overflowY = originalOverflowY;
       setTimeout(() => {
         button.textContent = originalText;
         button.disabled = false;
@@ -202,7 +216,7 @@ class MovieModal extends HTMLElement {
       <div class="modal-overlay" ${!isOpen ? 'style="display: none;"' : ""}>
         <div class="modal-content">
           <div class="modal-header">
-            <h2 class="modal-title">已选电影 (${movies.length}/${total})</h2>
+            <h2 class="modal-title">已选 (${movies.length}/${total})</h2>
             <button class="close-button" onclick="this.getRootNode().host.close()">&times;</button>
           </div>
           <ul class="movie-list">
