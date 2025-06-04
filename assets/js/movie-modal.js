@@ -172,7 +172,7 @@ class MovieModal extends HTMLElement {
           max-height: 320px;
           overflow-y: auto;
           flex: 1 1 auto;
-          background: linear-gradient(white 90%,rgba(0,0,0,0.03)), linear-gradient(rgba(0,0,0,0.03),white 10%) 0 100%;
+          // background: linear-gradient(white 90%,rgba(0,0,0,0.03)), linear-gradient(rgba(0,0,0,0.03),white 10%) 0 100%;
           background-repeat: no-repeat;
           background-size: 100% 20px, 100% 20px;
           background-attachment: local, local;
@@ -180,7 +180,7 @@ class MovieModal extends HTMLElement {
 
         .movie-item {
           padding: 12px;
-          border-bottom: 1px solid #eee;
+          // border-bottom: 1px solid #eee;
           display: flex;
           align-items: center;
         }
