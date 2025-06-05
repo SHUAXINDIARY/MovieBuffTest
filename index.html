@@ -73,8 +73,8 @@
       // 导出按钮点击事件
       exportButton.addEventListener("click", () => {
         const selectedMovies = JSON.parse(localStorage.getItem("movie") || "[]");
-        movieModal.setAttribute("movies", JSON.stringify(selectedMovies));
-        movieModal.setAttribute("open", "");
+        movieModal.movies = selectedMovies;
+        movieModal.open = true;
       });
 
       // 清空按钮点击事件
