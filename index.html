@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>电影浓度鉴定</title>
     <script src="./assets/js/html2canvas.js"></script>
+    <script
+      type="module"
+      src="https://cdn.jsdelivr.net/gh/lit/dist@2/core/lit-core.min.js"
+    ></script>
     <script type="module" src="./assets/js/movie-list.js"></script>
     <script type="module" src="./assets/js/movie-modal.js"></script>
     <style>
@@ -51,26 +55,30 @@
     <movie-list id="movieList" type="movie"></movie-list>
     <movie-modal id="movieModal" type="tokusatsu"></movie-modal>
 
-    <script>
+    <script type="module">
       const movieList = document.getElementById("movieList");
       const exportButton = document.getElementById("exportButton");
       const movieModal = document.getElementById("movieModal");
-      let selectedMovies = JSON.parse(localStorage.getItem("movie") || "[]");
+      
+      // 初始化导出按钮状态
+      const selectedMovies = JSON.parse(localStorage.getItem("movie") || "[]");
       exportButton.disabled = selectedMovies.length === 0;
 
+      // 监听选中状态变化
       movieList.addEventListener("selection-change", (event) => {
-        selectedMovies = event.detail.selectedMovies;
-        localStorage.setItem("movie", JSON.stringify(selectedMovies));
+        const selectedMovies = event.detail.selectedMovies;
         exportButton.disabled = selectedMovies.length === 0;
       });
 
+      // 导出按钮点击事件
       exportButton.addEventListener("click", () => {
+        const selectedMovies = JSON.parse(localStorage.getItem("movie") || "[]");
         movieModal.setAttribute("movies", JSON.stringify(selectedMovies));
         movieModal.setAttribute("open", "");
       });
 
+      // 清空按钮点击事件
       document.querySelector("#remove").addEventListener("click", () => {
-        selectedMovies = [];
         localStorage.removeItem("movie");
         location.reload();
       });
